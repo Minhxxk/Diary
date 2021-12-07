@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 class DBHelper(
-    context: Context?,
+    context: Context,
     name: String?,
     factory: SQLiteDatabase.CursorFactory?,
     version: Int
@@ -13,16 +13,14 @@ class DBHelper(
 
 
     override fun onCreate(db: SQLiteDatabase) {
-        var sql : String = "CREATE TABLE if not exists mytable (" +
-                "_id integer primary key autoincrement," +
-                "txt text);";
-
+        var sql : String = "CREATE TABLE if not exists DIARYLIST (" +
+                "content TEXT," +
+                "date TEXT);";
         db.execSQL(sql)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        val sql : String = "DROP TABLE if exists mytable"
-
+        val sql : String = "DROP TABLE if exists DIARYLIST"
         db.execSQL(sql)
         onCreate(db)
     }

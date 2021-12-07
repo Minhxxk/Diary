@@ -1,5 +1,6 @@
 package com.example.diary
 
+import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,8 @@ class MainActivity : AppCompatActivity() {
     val todayFragment = TodayFragment()
     val calendarFragment = CalendarFragment()
     val settingFragment = SettingFragment()
+    lateinit var dbHelper: DBHelper         //dbHelper 선언
+    lateinit var database: SQLiteDatabase   //database 선언
 
 
     //메뉴 구성 함수
@@ -42,6 +45,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //DB생성 및 불러오기
+        dbHelper = DBHelper(this, "diary.db", null, 1)
+        database = dbHelper.writableDatabase
+        Log.i("minhxxk", "DB 생성")
 
         setTodayFragment()
 

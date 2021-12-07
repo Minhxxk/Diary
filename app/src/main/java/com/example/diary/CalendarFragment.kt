@@ -1,5 +1,6 @@
 package com.example.diary
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,16 +14,14 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 class CalendarFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     var diaryList = mutableListOf<ItemData>()
-
+    lateinit var mainActivity: MainActivity
     lateinit var recyclerView: RecyclerView
     lateinit var mAdapter: ItemAdapter
     lateinit var todayText: String
     lateinit var todayDate: String
 
-
-    //Fragment가 생성될 때 호출되는 부분
+    //Fragment가 생성될 때 호출되는 부분        super.onCreate(savedInstanceState)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         todayText = arguments?.getString("TodayText").toString()
@@ -34,7 +33,7 @@ class CalendarFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         var rootView = inflater.inflate(R.layout.fragment_calendar, container, false)
         recyclerView = rootView.findViewById(R.id.recyclerView)
-        // Inflate the layout for this fragment
+        onSelect()
         initRecycler()
 
         return rootView
@@ -47,6 +46,17 @@ class CalendarFragment : Fragment() {
             add(ItemData("$todayText", "$todayDate"))
             mAdapter.notifyDataSetChanged()
         }
-
+    }
+    //DIARYLIST테이블 SELECT
+    private fun onSelect() {
+        var query = "SELECT * FROM DIARYLIST;"
+        var cursor = mainActivity.database.rawQuery(query, null)
+        while (cursor.moveToNext()){
+            Log.i("minhxxk", "CONTEXT : ${cursor.getString(cursor.getColumnIndexOrThrow("content"))}\n DATE : ${cursor.getString(cursor.getColumnIndexOrThrow("date"))}")
+        }
+    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
     }
 }
