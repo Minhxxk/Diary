@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--title과 icon속성은 메뉴 문자열과 아이콘을 지정.
+    메뉴는 기본으로 오버플로 메뉴로 나오는데, 만약 액션바에 아이콘으로 나타나게 하려면 showAsAction 속성을 이용
+    showAsAction 3가지 속성값
+    never(기본)      : 항상 오버플로 메뉴로 출력
+    ifRoom          : 만약 액션바에 공간이 있다면 액션 아이템으로, 없다면 오버플로 메뉴로 출력
+    always          : 항상 액션 아이템으로 출력
+    -->
+    <item
+        android:id="@+id/menu1"
+        android:title="New Diary"/>
+    <item
+        android:id="@+id/menu2"
+        android:title="Diary List"/>
+    <item
+        android:id="@+id/menu3"
+        android:title="Setting"/>
+</menu>
