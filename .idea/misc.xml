@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Diary/app/src/main/res/layout/fragment_today.xml" value="0.1" />
+        <entry key="..\:/Diary/app/src/main/res/layout/recycler_item.xml" value="0.1" />
         <entry key="..\:/Study/11_11/app/src/main/res/drawable/item_color.xml" value="0.14427083333333332" />
         <entry key="..\:/Study/11_11/app/src/main/res/layout/activity_main.xml" value="0.16" />
         <entry key="..\:/Study/11_11/app/src/main/res/layout/fragment_calendar.xml" value="0.2" />
