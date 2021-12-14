@@ -9,7 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 
@@ -37,13 +40,18 @@ class CalendarFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         var rootView = inflater.inflate(R.layout.fragment_calendar, container, false)
+        val saturdayDecorator = SaturdayDecorator()
+        val sundayDecorator = SundayDecorator()
         recyclerView = rootView.findViewById(R.id.recyclerView)
         materialCalendarView = rootView.findViewById(R.id.materialCalendar)
-        materialCalendarView.selectedDate = CalendarDay.today()
+//        materialCalendarView.selectedDate = CalendarDay.today()
         initRecycler()
+        materialCalendarView.addDecorators(saturdayDecorator, sundayDecorator)
+
         materialCalendarView.setOnDateChangedListener { widget, date, selected ->
             var selectedDateStr = "${date.year}-" + String.format("%02d", date.month + 1) + "-" + String.format("%02d", date.day)
             diaryList.clear()
+            mAdapter.notifyDataSetChanged()
             Log.i("minhxxk", selectedDateStr)
             var query = "SELECT * FROM DIARYLIST WHERE date = '$selectedDateStr';"
             var cursor = mainActivity.database.rawQuery(query, null)
@@ -52,28 +60,28 @@ class CalendarFragment : Fragment() {
                 diaryList.apply{
                     add(ItemData(cursor.getString(0), cursor.getString(1)))
                 }
-                mAdapter.notifyDataSetChanged()
             }
         }
-
         return rootView
     }
 
-
-
     //DIARYLIST테이블 SELECT
     private fun onSelect() {
+        diaryList.clear()
         todayDate = "${CalendarDay.today().year}-${String.format("%02d", CalendarDay.today().month+1)}-${String.format("%02d", CalendarDay.today().day)}"
         Log.i("minhxxk", todayDate)
-        var query = "SELECT * FROM DIARYLIST WHERE date='$todayDate';"
+        var query = "SELECT * FROM DIARYLIST;"
         var cursor = mainActivity.database.rawQuery(query, null)
         while (cursor.moveToNext()) {
-            Log.i("minhxxk", "CONTEXT : ${cursor.getString(cursor.getColumnIndexOrThrow("content"))} DATE : ${cursor.getString(cursor.getColumnIndexOrThrow("date"))}")
+//            Log.i("minhxxk", "CONTEXT : ${cursor.getString(cursor.getColumnIndexOrThrow("content"))} DATE : ${cursor.getString(cursor.getColumnIndexOrThrow("date"))}")
             diaryList.apply{
                 add(ItemData(cursor.getString(0), cursor.getString(1)))
+                materialCalendarView.addDecorator(DiaryDecorator(cursor.getString(cursor.getColumnIndexOrThrow("date"))))
             }
         }
     }
+
+    //RecyclerView 초기화
     private fun initRecycler() {
         mAdapter = ItemAdapter(requireContext(), diaryList as ArrayList<ItemData>)
         recyclerView.adapter = mAdapter

@@ -9,6 +9,8 @@
         android:id="@+id/rv_title"
         android:padding="5dp"
         android:textSize="20dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="Title"
         android:textStyle="bold"/>
     <TextView
@@ -18,4 +20,8 @@
         android:text="날짜"
         android:textSize="13dp"
         android:padding="5dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="#000000" />
 </LinearLayout>

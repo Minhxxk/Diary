@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+
 class ItemAdapter(private val context: Context, private val dataList: ArrayList<ItemData>): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.recycler_item, parent, false)
@@ -15,6 +16,10 @@ class ItemAdapter(private val context: Context, private val dataList: ArrayList<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(dataList[position])
+        holder.itemView.setOnClickListener {
+            val customDialog = CustomDialog(activity)
+            customDialog.myDig()
+        }
     }
 
     override fun getItemCount(): Int {
