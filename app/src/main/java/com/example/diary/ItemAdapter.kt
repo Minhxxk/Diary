@@ -17,8 +17,10 @@ class ItemAdapter(private val context: Context, private val dataList: ArrayList<
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(dataList[position])
         holder.itemView.setOnClickListener {
-            val customDialog = CustomDialog(activity)
-            customDialog.myDig()
+            val content = dataList[position].title.toString()
+            val date = dataList[position].date.toString()
+            val customDialog = CustomDialog(this.context)
+            customDialog.ShowDialog(content, date)
         }
     }
 
