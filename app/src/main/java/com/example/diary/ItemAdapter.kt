@@ -1,11 +1,14 @@
 package com.example.diary
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 
 class ItemAdapter(private val context: Context, private val dataList: ArrayList<ItemData>): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
@@ -16,12 +19,6 @@ class ItemAdapter(private val context: Context, private val dataList: ArrayList<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(dataList[position])
-        holder.itemView.setOnClickListener {
-            val content = dataList[position].title.toString()
-            val date = dataList[position].date.toString()
-            val customDialog = CustomDialog(this.context)
-            customDialog.ShowDialog(content, date)
-        }
     }
 
     override fun getItemCount(): Int {
@@ -36,6 +33,14 @@ class ItemAdapter(private val context: Context, private val dataList: ArrayList<
         fun bind(item: ItemData) {
             title.text = item.title
             date.text = item.date
+
+            itemView.setOnClickListener {
+                Intent(context, DialogCustom::class.java).apply {
+                    putExtra("data_date", item.date)
+                    putExtra("data_title", item.title)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }.run { context.startActivity(this) }
+            }
         }
     }
 }
