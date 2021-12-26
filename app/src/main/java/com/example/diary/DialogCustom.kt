@@ -2,6 +2,7 @@ package com.example.diary
 
 import android.app.Dialog
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -21,19 +22,19 @@ class DialogCustom : AppCompatActivity() {
 
         val date = intent.getSerializableExtra("data_date")
         val content = intent.getSerializableExtra("data_title")
+
         tv_date_title.text = "$date"
         et_content.setText("$content")
 
         btn_ok.setOnClickListener(AcceptButtonListener())
         btn_cancel.setOnClickListener(CancelButtonListener())
+        Log.i("minhxxk", "asdasd")
     }
 
     //CustomDialog의 확인 버튼 클릭 시
     inner class AcceptButtonListener: View.OnClickListener{
         override fun onClick(v: View?) {
-            val database = MainActivity().database
-            var query = "UPDATE DIARYLIST SET content = ${et_content.text};"
-            database.execSQL(query)
+            DBHelper(applicationContext).upgradeDiary(et_content)
             Toast.makeText(this@DialogCustom, "오늘의 일기가 수정되었습니다.", Toast.LENGTH_SHORT).show()
             finish()
         }

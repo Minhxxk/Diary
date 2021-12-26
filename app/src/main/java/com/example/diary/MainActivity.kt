@@ -47,9 +47,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //DB생성 및 불러오기
-        dbHelper = DBHelper(this, "diary.db", null, 1)
-        database = dbHelper.writableDatabase
+        Log.i("minhxxk", "dsadsa")
         Log.i("minhxxk", "DB 생성")
+        dbHelper = DBHelper(this)
+        database = dbHelper.writableDatabase
 
         setTodayFragment()
 
