@@ -60,7 +60,7 @@ class TodayFragment : Fragment() {
             var query = "INSERT INTO DIARYLIST(content, date) values('$todayText', '$todayDate');"
             mainActivity.database.execSQL(query)
 
-            Log.i("minhxxk", "$todayText 에 $todayText 가 작성되었습니다.")
+            Log.i("minhxxk", "$todayDate 에 $todayText 가 작성되었습니다.")
             Toast.makeText(context, "오늘의 일기가 작성되었습니다.", Toast.LENGTH_SHORT).show()
             //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
 //            calendarFragment.arguments = bundle

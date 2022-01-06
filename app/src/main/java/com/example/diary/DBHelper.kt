@@ -1,11 +1,9 @@
 package com.example.diary
 
-import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.widget.EditText
-import kotlinx.android.synthetic.main.activity_dialog_custom.*
+import java.io.Serializable
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, name, null, version) {
 
@@ -27,9 +25,9 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, name, null, version
         onCreate(db)
     }
 
-    fun upgradeDiary(content: EditText){
+    fun upgradeDiary(et_content: String, content: String){
         val db = this.writableDatabase
-        var query = "UPDATE DIARYLIST SET content = ${content};"
+        var query = "UPDATE DIARYLIST SET content = ${et_content} WHERE content = ${content};"
         db.execSQL(query)
     }
 
