@@ -1,15 +1,20 @@
 package com.example.diary
 
+import android.app.Fragment
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.diary.databinding.ActivityDialogCustomBinding
+import com.example.diary.databinding.FragmentCalendarBinding
 
 class DialogCustom : AppCompatActivity() {
     //전역 변수로 바인딩 객체 선언
     lateinit var dcBinding: ActivityDialogCustomBinding
+    lateinit var calendarFragment: CalendarFragment
+    var diaryList = mutableListOf<ItemData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,39 +24,43 @@ class DialogCustom : AppCompatActivity() {
         dcBinding = ActivityDialogCustomBinding.inflate(layoutInflater)
         //getRoot메서드로 레이아웃 내부의 최상위 위치 뷰의
         //인스턴스를 활용하여 생성된 뷰를 액티비티에 표시
-        setContentView(binding.root)
+        setContentView(dcBinding.root)
 
-        val date = intent.getSerializableExtra("data_date")
-        val content = intent.getSerializableExtra("data_title")
 
-        binding.tvDateTitle.text = "$date"
-        val et_Content = binding.etContent.setText("$content")
+        val date = intent.getStringExtra("data_date")
+        val content = intent.getStringExtra("data_title")
+        dcBinding.tvDateTitle.setText("$date")
+        dcBinding.etContent.setText("$content")
 
-        binding.btnOk.setOnClickListener{
+        dcBinding.btnOk.setOnClickListener{
+            val et_Content = dcBinding.etContent.text.toString()
+//            Log.i("minhxxk", "$et_Content + $content + $date")
+//            dcBinding.tvDateTitle.text = "$date"
+            DBHelper(applicationContext).upgradeDiary(et_Content, content.toString(), date.toString())
             Toast.makeText(this@DialogCustom, "오늘의 일기가 수정되었습니다.", Toast.LENGTH_SHORT).show()
-            DBHelper(applicationContext).upgradeDiary(et_Content, content)
             finish()
-        }
-        binding.btnCancel.setOnClickListener(CancelButtonListener())
-        Log.i("minhxxk", "asdasd")
-    }
+            Log.i("minhxxk", "DialogCustom 종료")
+            calendarFragment = CalendarFragment()
+//            calendarFragment.diaryList.clear()
+            calendarFragment.mAdapter = ItemAdapter(applicationContext, diaryList as ArrayList<ItemData>)
 
-    //CustomDialog의 확인 버튼 클릭 시
-    inner class AcceptButtonListener(): View.OnClickListener{
-        override fun onClick(v: View?) {
+            calendarFragment.recyclerView.adapter = calendarFragment.mAdapter
+            calendarFragment.onSelect()
+            calendarFragment.mAdapter.notifyDataSetChanged()
         }
+        dcBinding.btnCancel.setOnClickListener(CancelButtonListener())
     }
 
     //CustomDialog의 취소 버튼 클릭 시
     inner class CancelButtonListener: View.OnClickListener{
         override fun onClick(v: View?) {
             finish()
+            Log.i("minhxxk", "DialogCustom 취소버튼 클릭")
         }
     }
 
-//    override fun onDestroy() {
-//        //onDestroy에서 binding class 인스턴스 참조를 정리해주어야 한다.
-//        dcBinding = null
-//        super.onDestroy()
-//    }
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i("minhxxk", "DialogCustom 파괴")
+    }
 }

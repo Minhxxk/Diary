@@ -3,7 +3,6 @@ package com.example.diary
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import java.io.Serializable
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, name, null, version) {
 
@@ -25,9 +24,9 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, name, null, version
         onCreate(db)
     }
 
-    fun upgradeDiary(et_content: String, content: String){
+    fun upgradeDiary(et_content: String, content: String, date: String){
         val db = this.writableDatabase
-        var query = "UPDATE DIARYLIST SET content = ${et_content} WHERE content = ${content};"
+        var query = "UPDATE DIARYLIST SET content = '${et_content}' WHERE date = '${date}' and content = '${content}';"
         db.execSQL(query)
     }
 

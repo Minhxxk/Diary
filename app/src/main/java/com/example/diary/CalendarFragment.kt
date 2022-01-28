@@ -31,22 +31,24 @@ class CalendarFragment : Fragment() {
         mainActivity = context as MainActivity
     }
 
-    //Fragment가 생성될 때 호출되는 부분        super.onCreate(savedInstanceState)
+    //Fragment가 생성될 때 호출되는 부분
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i("minhxxk", "onCreate 실행")
     }
 
     //onCreate 후에 화면을 구성할 때 호출되는 부분
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        Log.i("minhxxk", "onCreateView 실행")
         var rootView = inflater.inflate(R.layout.fragment_calendar, container, false)
         val saturdayDecorator = SaturdayDecorator()
         val sundayDecorator = SundayDecorator()
         recyclerView = rootView.findViewById(R.id.recyclerView)
         materialCalendarView = rootView.findViewById(R.id.materialCalendar)
 //        materialCalendarView.selectedDate = CalendarDay.today()
-        initRecycler()
         materialCalendarView.addDecorators(saturdayDecorator, sundayDecorator)
+        initRecycler()
 
         materialCalendarView.setOnDateChangedListener { widget, date, selected ->
             var selectedDateStr = "${date.year}-" + String.format("%02d", date.month + 1) + "-" + String.format("%02d", date.day)
@@ -66,10 +68,10 @@ class CalendarFragment : Fragment() {
     }
 
     //DIARYLIST테이블 SELECT
-    private fun onSelect() {
+     fun onSelect() {
         diaryList.clear()
         todayDate = "${CalendarDay.today().year}-${String.format("%02d", CalendarDay.today().month+1)}-${String.format("%02d", CalendarDay.today().day)}"
-        Log.i("minhxxk", todayDate)
+//        Log.i("minhxxk", todayDate)
         var query = "SELECT * FROM DIARYLIST;"
         var cursor = mainActivity.database.rawQuery(query, null)
         while (cursor.moveToNext()) {
@@ -82,7 +84,7 @@ class CalendarFragment : Fragment() {
     }
 
     //RecyclerView 초기화
-    private fun initRecycler() {
+     fun initRecycler() {
         mAdapter = ItemAdapter(requireContext(), diaryList as ArrayList<ItemData>)
         recyclerView.adapter = mAdapter
         onSelect()
