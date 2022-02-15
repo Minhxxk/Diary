@@ -46,9 +46,9 @@ class CalendarFragment : Fragment() {
         val sundayDecorator = SundayDecorator()
         recyclerView = rootView.findViewById(R.id.recyclerView)
         materialCalendarView = rootView.findViewById(R.id.materialCalendar)
+        initRecycler()
 //        materialCalendarView.selectedDate = CalendarDay.today()
         materialCalendarView.addDecorators(saturdayDecorator, sundayDecorator)
-        initRecycler()
 
         materialCalendarView.setOnDateChangedListener { widget, date, selected ->
             var selectedDateStr = "${date.year}-" + String.format("%02d", date.month + 1) + "-" + String.format("%02d", date.day)

@@ -1,6 +1,5 @@
 package com.example.diary
 
-import android.app.Fragment
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,6 +13,7 @@ class DialogCustom : AppCompatActivity() {
     //전역 변수로 바인딩 객체 선언
     lateinit var dcBinding: ActivityDialogCustomBinding
     lateinit var calendarFragment: CalendarFragment
+    var mAdapter: ItemAdapter = CalendarFragment().mAdapter
     var diaryList = mutableListOf<ItemData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,13 +40,6 @@ class DialogCustom : AppCompatActivity() {
             Toast.makeText(this@DialogCustom, "오늘의 일기가 수정되었습니다.", Toast.LENGTH_SHORT).show()
             finish()
             Log.i("minhxxk", "DialogCustom 종료")
-            calendarFragment = CalendarFragment()
-//            calendarFragment.diaryList.clear()
-            calendarFragment.mAdapter = ItemAdapter(applicationContext, diaryList as ArrayList<ItemData>)
-
-            calendarFragment.recyclerView.adapter = calendarFragment.mAdapter
-            calendarFragment.onSelect()
-            calendarFragment.mAdapter.notifyDataSetChanged()
         }
         dcBinding.btnCancel.setOnClickListener(CancelButtonListener())
     }
@@ -62,5 +55,8 @@ class DialogCustom : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.i("minhxxk", "DialogCustom 파괴")
+        calendarFragment = CalendarFragment()
+        calendarFragment.mAdapter.notifyDataSetChanged()
+
     }
 }

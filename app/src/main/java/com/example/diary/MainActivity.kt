@@ -13,9 +13,8 @@ import com.example.diary.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-    val todayFragment = TodayFragment()
-    val calendarFragment = CalendarFragment()
-    val settingFragment = SettingFragment()
+    private val todayFragment = TodayFragment()
+    private val calendarFragment = CalendarFragment()
     lateinit var dbHelper: DBHelper         //dbHelper 선언
     lateinit var database: SQLiteDatabase   //database 선언
 
@@ -34,10 +33,6 @@ class MainActivity : AppCompatActivity() {
         }
         R.id.menu2 -> {
             setCalendarFragment()
-            true
-        }
-        R.id.menu3 -> {
-            setSettingFragment()
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -63,9 +58,6 @@ class MainActivity : AppCompatActivity() {
         binding.tab2.setOnClickListener {
             setCalendarFragment()
         }
-        binding.tab3.setOnClickListener {
-            setSettingFragment()
-        }
     }
 
     private fun setTodayFragment() {
@@ -78,10 +70,4 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.framelayout, calendarFragment)
         transaction.commit()
     }
-    private fun setSettingFragment() {
-        val transaction = supportFragmentManager.beginTransaction()
-            .replace(R.id.framelayout, settingFragment)
-        transaction.commit()
-    }
-
 }
