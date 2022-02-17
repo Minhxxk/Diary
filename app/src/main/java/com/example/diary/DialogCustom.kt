@@ -5,16 +5,12 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.diary.databinding.ActivityDialogCustomBinding
-import com.example.diary.databinding.FragmentCalendarBinding
 
-class DialogCustom : AppCompatActivity() {
+class DialogCustom() : AppCompatActivity() {
     //전역 변수로 바인딩 객체 선언
-    lateinit var dcBinding: ActivityDialogCustomBinding
-    lateinit var calendarFragment: CalendarFragment
-    var mAdapter: ItemAdapter = CalendarFragment().mAdapter
     var diaryList = mutableListOf<ItemData>()
+    lateinit var dcBinding: ActivityDialogCustomBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,10 +30,10 @@ class DialogCustom : AppCompatActivity() {
 
         dcBinding.btnOk.setOnClickListener{
             val et_Content = dcBinding.etContent.text.toString()
-//            Log.i("minhxxk", "$et_Content + $content + $date")
-//            dcBinding.tvDateTitle.text = "$date"
             DBHelper(applicationContext).upgradeDiary(et_Content, content.toString(), date.toString())
             Toast.makeText(this@DialogCustom, "오늘의 일기가 수정되었습니다.", Toast.LENGTH_SHORT).show()
+            Log.i("minhxxk", "Refresh 실행 완료")
+
             finish()
             Log.i("minhxxk", "DialogCustom 종료")
         }
@@ -55,8 +51,5 @@ class DialogCustom : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.i("minhxxk", "DialogCustom 파괴")
-        calendarFragment = CalendarFragment()
-        calendarFragment.mAdapter.notifyDataSetChanged()
-
     }
 }

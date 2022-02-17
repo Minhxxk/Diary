@@ -22,25 +22,31 @@ class CalendarFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     lateinit var materialCalendarView: MaterialCalendarView
     lateinit var recyclerView: RecyclerView
-    lateinit var mAdapter: ItemAdapter
+    val mAdapter: ItemAdapter? by lazy {
+        ItemAdapter(requireContext(), diaryList as ArrayList<ItemData>)
+    }
     lateinit var todayDate: String
+
+
 
     //프래그먼트가 액티비티와 연결되어 있었던 경우 호출됩니다. 여기서 액티비티가 전달됩니다.
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        Log.i("minhxxk", "onAttach")
+
         mainActivity = context as MainActivity
     }
 
     //Fragment가 생성될 때 호출되는 부분
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("minhxxk", "onCreate 실행")
+        Log.i("minhxxk", "onCreate")
     }
 
     //onCreate 후에 화면을 구성할 때 호출되는 부분
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        Log.i("minhxxk", "onCreateView 실행")
+        Log.i("minhxxk", "onCreateView")
         var rootView = inflater.inflate(R.layout.fragment_calendar, container, false)
         val saturdayDecorator = SaturdayDecorator()
         val sundayDecorator = SundayDecorator()
@@ -53,7 +59,7 @@ class CalendarFragment : Fragment() {
         materialCalendarView.setOnDateChangedListener { widget, date, selected ->
             var selectedDateStr = "${date.year}-" + String.format("%02d", date.month + 1) + "-" + String.format("%02d", date.day)
             diaryList.clear()
-            mAdapter.notifyDataSetChanged()
+            mAdapter?.notifyDataSetChanged()
             Log.i("minhxxk", selectedDateStr)
             var query = "SELECT * FROM DIARYLIST WHERE date = '$selectedDateStr';"
             var cursor = mainActivity.database.rawQuery(query, null)
@@ -67,6 +73,45 @@ class CalendarFragment : Fragment() {
         return rootView
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.i("minhxxk", "onStart")
+    }
+    override fun onResume() {
+        super.onResume()
+        initRecycler()
+        Log.i("minhxxk", "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.i("minhxxk", "onPause")
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i("minhxxk", "onStop")
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.i("minhxxk", "onDestroyView")
+
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i("minhxxk", "onDestroy")
+
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.i("minhxxk", "onDetach")
+
+    }
+
     //DIARYLIST테이블 SELECT
      fun onSelect() {
         diaryList.clear()
@@ -75,7 +120,6 @@ class CalendarFragment : Fragment() {
         var query = "SELECT * FROM DIARYLIST;"
         var cursor = mainActivity.database.rawQuery(query, null)
         while (cursor.moveToNext()) {
-//            Log.i("minhxxk", "CONTEXT : ${cursor.getString(cursor.getColumnIndexOrThrow("content"))} DATE : ${cursor.getString(cursor.getColumnIndexOrThrow("date"))}")
             diaryList.apply{
                 add(ItemData(cursor.getString(0), cursor.getString(1)))
                 materialCalendarView.addDecorator(DiaryDecorator(cursor.getString(cursor.getColumnIndexOrThrow("date"))))
@@ -85,9 +129,9 @@ class CalendarFragment : Fragment() {
 
     //RecyclerView 초기화
      fun initRecycler() {
-        mAdapter = ItemAdapter(requireContext(), diaryList as ArrayList<ItemData>)
+//        mAdapter = ItemAdapter(requireContext(), diaryList as ArrayList<ItemData>)
         recyclerView.adapter = mAdapter
         onSelect()
-        mAdapter.notifyDataSetChanged()
+        mAdapter?.notifyDataSetChanged()
     }
 }
