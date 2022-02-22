@@ -22,25 +22,17 @@ class CalendarFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     lateinit var materialCalendarView: MaterialCalendarView
     lateinit var recyclerView: RecyclerView
-    val mAdapter: ItemAdapter? by lazy {
+    private val mAdapter: ItemAdapter? by lazy {
         ItemAdapter(requireContext(), diaryList as ArrayList<ItemData>)
     }
     lateinit var todayDate: String
-
-
+    val saturdayDecorator = SaturdayDecorator()
+    val sundayDecorator = SundayDecorator()
 
     //프래그먼트가 액티비티와 연결되어 있었던 경우 호출됩니다. 여기서 액티비티가 전달됩니다.
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        Log.i("minhxxk", "onAttach")
-
         mainActivity = context as MainActivity
-    }
-
-    //Fragment가 생성될 때 호출되는 부분
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.i("minhxxk", "onCreate")
     }
 
     //onCreate 후에 화면을 구성할 때 호출되는 부분
@@ -48,17 +40,21 @@ class CalendarFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         Log.i("minhxxk", "onCreateView")
         var rootView = inflater.inflate(R.layout.fragment_calendar, container, false)
-        val saturdayDecorator = SaturdayDecorator()
-        val sundayDecorator = SundayDecorator()
-        recyclerView = rootView.findViewById(R.id.recyclerView)
-        materialCalendarView = rootView.findViewById(R.id.materialCalendar)
-        initRecycler()
-//        materialCalendarView.selectedDate = CalendarDay.today()
-        materialCalendarView.addDecorators(saturdayDecorator, sundayDecorator)
+        onBinding(rootView)
 
-        materialCalendarView.setOnDateChangedListener { widget, date, selected ->
-            var selectedDateStr = "${date.year}-" + String.format("%02d", date.month + 1) + "-" + String.format("%02d", date.day)
+        //오늘 날짜 selected
+        materialCalendarView.selectedDate = CalendarDay.today()
+        //해당 날짜에 작성한 일기가 있으면 Decorate
+        decorateCheckDiary()
+        //주말(토요일->파란색, 일요일->빨간색)
+        materialCalendarView.addDecorators(saturdayDecorator, sundayDecorator)
+        //작성된 오늘 일기 가져오기
+        getTodayDiary()
+
+        //MaterialCalendarView 날짜 변경 시 이벤트
+        materialCalendarView.setOnDateChangedListener { widget, date, selected ->   //widget: MaterialCalendarView, date: CalendarDay, selected: Boolean
             diaryList.clear()
+            var selectedDateStr = "${date.year}-" + String.format("%02d", date.month + 1) + "-" + String.format("%02d", date.day)
             mAdapter?.notifyDataSetChanged()
             Log.i("minhxxk", selectedDateStr)
             var query = "SELECT * FROM DIARYLIST WHERE date = '$selectedDateStr';"
@@ -73,65 +69,42 @@ class CalendarFragment : Fragment() {
         return rootView
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.i("minhxxk", "onStart")
+    private fun onBinding(rootView: View) {
+        recyclerView = rootView.findViewById(R.id.recyclerView)
+        materialCalendarView = rootView.findViewById(R.id.materialCalendar)
+        recyclerView.adapter = mAdapter
     }
+
+    //Refresh
     override fun onResume() {
         super.onResume()
-        initRecycler()
-        Log.i("minhxxk", "onResume")
+        //선택된 항목의 일기 수정 후 Refresh
+        getTodayDiary()
+//        Log.i("minhxxk", "onResume")
     }
 
-    override fun onPause() {
-        super.onPause()
-        Log.i("minhxxk", "onPause")
-
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.i("minhxxk", "onStop")
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.i("minhxxk", "onDestroyView")
-
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i("minhxxk", "onDestroy")
-
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.i("minhxxk", "onDetach")
-
-    }
-
-    //DIARYLIST테이블 SELECT
-     fun onSelect() {
-        diaryList.clear()
-        todayDate = "${CalendarDay.today().year}-${String.format("%02d", CalendarDay.today().month+1)}-${String.format("%02d", CalendarDay.today().day)}"
-//        Log.i("minhxxk", todayDate)
+    //해당 날짜에 작성한 일기가 있으면 SELECT 후 Decorate 이벤트
+    private fun decorateCheckDiary(){
         var query = "SELECT * FROM DIARYLIST;"
         var cursor = mainActivity.database.rawQuery(query, null)
         while (cursor.moveToNext()) {
             diaryList.apply{
-                add(ItemData(cursor.getString(0), cursor.getString(1)))
                 materialCalendarView.addDecorator(DiaryDecorator(cursor.getString(cursor.getColumnIndexOrThrow("date"))))
             }
         }
     }
 
-    //RecyclerView 초기화
-     fun initRecycler() {
-//        mAdapter = ItemAdapter(requireContext(), diaryList as ArrayList<ItemData>)
-        recyclerView.adapter = mAdapter
-        onSelect()
+    //데이터베이스에 저장된 오늘 일기 SELECT 이벤트
+    private fun getTodayDiary(){
+        todayDate = "${CalendarDay.today().year}-${String.format("%02d", CalendarDay.today().month+1)}-${String.format("%02d", CalendarDay.today().day)}"
+        var query = "SELECT * FROM DIARYLIST WHERE date = '$todayDate';"
+        var cursor = mainActivity.database.rawQuery(query, null)
+        diaryList.clear()
+        while (cursor.moveToNext()) {
+            diaryList.apply{
+                add(ItemData(cursor.getString(0), cursor.getString(1)))
+            }
+        }
         mAdapter?.notifyDataSetChanged()
     }
 }

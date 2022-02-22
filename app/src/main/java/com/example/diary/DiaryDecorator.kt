@@ -13,9 +13,12 @@ import com.prolificinteractive.materialcalendarview.spans.DotSpan
 
 class DiaryDecorator(date: String): DayViewDecorator {
     private val diaryDate = date
+
     override fun shouldDecorate(day: CalendarDay?): Boolean {
-        val dateStr = "${day?.year}-${String.format("%02d", day?.month!! + 1)}-${String.format("%02d", day?.day)}"
-//        Log.i("minhxxk", dateStr)
+        val dateStr = "${day?.year}" +
+                "-${String.format("%02d", day?.month!! + 1)}" +
+                "-${String.format("%02d", day?.day)}"
+
         return dateStr == diaryDate
     }
 

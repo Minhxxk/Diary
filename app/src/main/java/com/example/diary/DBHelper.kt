@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, name, null, version) {
-
     companion object{
         private val name = "diary.db"
         private val version = 1
@@ -19,7 +18,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, name, null, version
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        val sql : String = "DROP TABLE if exists DIARYLIST"
+        val sql = "DROP TABLE if exists DIARYLIST"
         db.execSQL(sql)
         onCreate(db)
     }
@@ -30,4 +29,9 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, name, null, version
         db.execSQL(query)
     }
 
+    fun insertDiary(todayText: String, todayDate: String){
+        val db = this.writableDatabase
+        var query = "INSERT INTO DIARYLIST(content, date) values('$todayText', '$todayDate');"
+        db.execSQL(query)
+    }
 }

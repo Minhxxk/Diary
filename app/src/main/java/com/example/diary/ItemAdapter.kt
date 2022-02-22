@@ -24,9 +24,9 @@ class ItemAdapter(val context: Context, var dataList: ArrayList<ItemData>): Recy
         Log.i("minhxxk", "${dataList.size}")
         return dataList.size
     }
-    fun dataChange(){
-        notifyDataSetChanged()
-    }
+//    fun dataChange(){
+//        notifyDataSetChanged()
+//    }
 
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
@@ -34,13 +34,15 @@ class ItemAdapter(val context: Context, var dataList: ArrayList<ItemData>): Recy
         private val date = itemView.findViewById<TextView>(R.id.rv_date)
 
         fun bind(item: ItemData) {
-            title.text = item.title
+            title.text = item.content
             date.text = item.date
 
+            //RecyclerView의 Item 클릭 시
             itemView.setOnClickListener {
                 Intent(context, DialogCustom::class.java).apply {
                     putExtra("data_date", item.date)
-                    putExtra("data_title", item.title)
+                    putExtra("data_title", item.content)
+                    //실행하는 액티비티를 새 TASK로 생성
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }.run { context.startActivity(this) }
             }

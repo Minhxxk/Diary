@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //DB생성 및 불러오기
-        Log.i("minhxxk", "dsadsa")
         Log.i("minhxxk", "DB 생성")
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
@@ -51,7 +50,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setTodayFragment()
+//        setTodayFragment()
+
         binding.tab1.setOnClickListener {
             setTodayFragment()
         }
@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.framelayout, todayFragment)
         transaction.commit()
     }
+
     private fun setCalendarFragment() {
         val transaction = supportFragmentManager.beginTransaction()
             .replace(R.id.framelayout, calendarFragment)
