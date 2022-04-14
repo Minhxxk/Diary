@@ -26,8 +26,8 @@ class CalendarFragment : Fragment() {
         ItemAdapter(requireContext(), diaryList as ArrayList<ItemData>)
     }
     lateinit var todayDate: String
-    val saturdayDecorator = SaturdayDecorator()
-    val sundayDecorator = SundayDecorator()
+    private val saturdayDecorator = SaturdayDecorator()
+    private val sundayDecorator = SundayDecorator()
 
     //프래그먼트가 액티비티와 연결되어 있었던 경우 호출됩니다. 여기서 액티비티가 전달됩니다.
     override fun onAttach(context: Context) {

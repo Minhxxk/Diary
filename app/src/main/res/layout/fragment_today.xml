@@ -40,22 +40,24 @@
         <EditText
             android:id="@+id/et_Text"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_height="match_parent"
             android:layout_below="@id/tv_title"
             android:cursorVisible="true"
             android:background="@drawable/border"
             android:gravity="start"
             android:hint="오늘은..."
+            android:layout_weight="1"
             android:inputType="textMultiLine"
             android:padding="2dp"
             android:textSize="14dp" />
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/btn_save"
             android:text="작성"
             android:textColor="@color/black"
+            android:layout_weight="12"
             android:textSize="20dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"

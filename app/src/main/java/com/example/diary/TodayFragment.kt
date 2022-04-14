@@ -40,22 +40,10 @@ class TodayFragment : Fragment() {
             }
             etText.text.clear()
 
-//            //bundle의 argument에 저장
-//            val calendarFragment = mainActivity.calendarFragment
-//            var bundle = Bundle()
-//            bundle.putString("TodayText", todayText)
-//            bundle.putString("Today", todayDate.toString())
-
             //DB에 일기 INSERT
             DBHelper(requireContext()).insertDiary(todayText, todayDate.toString())
             Toast.makeText(context, "오늘의 일기가 작성되었습니다.", Toast.LENGTH_SHORT).show()
-//            Log.i("minhxxk", "$todayDate 에 $todayText 가 작성되었습니다.")
 
-            //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
-//            calendarFragment.arguments = bundle
-//            activity?.supportFragmentManager!!.beginTransaction()
-//                .replace(R.id.framelayout, calendarFragment)
-//                .commit()
         }
         return rootView
     }

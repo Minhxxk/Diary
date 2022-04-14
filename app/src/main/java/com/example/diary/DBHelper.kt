@@ -34,4 +34,10 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, name, null, version
         var query = "INSERT INTO DIARYLIST(content, date) values('$todayText', '$todayDate');"
         db.execSQL(query)
     }
+
+    fun deleteDiary(todayText: String, todayDate: String){
+        val db = this.writableDatabase
+        var query = "DELETE FROM DIARYLIST WHERE content = '${todayText}' and date = '${todayDate}';"
+        db.execSQL(query)
+    }
 }
